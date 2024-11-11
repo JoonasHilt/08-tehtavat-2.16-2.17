@@ -9,6 +9,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [notification, setNotification] = useState(null);
+  const [notificationType, setNotificationType] = useState("success");
 
   useEffect(() => {
     addPersons.getAll().then((initialPersons) => {
@@ -16,13 +18,18 @@ const App = () => {
     });
   }, []);
 
+  const showNotification = (message, type = "success") => {
+    setNotification(message);
+    setNotificationType(type);
+    setTimeout(() => {
+      setNotification(null);
+    }, 5000);
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
 
-    // Muunnetaan syötetty nimi pieniksi kirjaimiksi
     const newNameLower = newName.toLowerCase();
-
-    // Tarkistetaan, onko nimeä jo olemassa riippumatta kirjainkoosta
     const existingPerson = persons.find(
       (person) => person.name.toLowerCase() === newNameLower
     );
@@ -45,10 +52,14 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+            showNotification(`Updated ${returnedPerson.name}`, "success");
           })
           .catch((error) => {
             console.log("Error updating person:", error);
-            alert("An error occurred while updating the person");
+            showNotification(
+              "An error occurred while updating the person",
+              "error"
+            );
           });
       }
       return;
@@ -62,10 +73,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson));
         setNewName("");
         setNewNumber("");
+        showNotification(`Added ${returnedPerson.name}`, "success");
       })
       .catch((error) => {
         console.log("Error adding person:", error);
-        alert("An error occurred while adding the person");
+        showNotification("An error occurred while adding the person", "error");
       });
   };
 
@@ -75,10 +87,14 @@ const App = () => {
         .remove(id)
         .then(() => {
           setPersons(persons.filter((person) => person.id !== id));
+          showNotification(`Deleted ${name}`, "success");
         })
         .catch((error) => {
           console.log("Error deleting person:", error);
-          alert("An error occurred while deleting the person");
+          showNotification(
+            "An error occurred while deleting the person",
+            "error"
+          );
         });
     }
   };
@@ -105,7 +121,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
-
+      {notification && <div className={notificationType}>{notification}</div>}
       <h3>Add a new</h3>
       <PersonForm
         addPerson={addPerson}
