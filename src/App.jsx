@@ -57,7 +57,7 @@ const App = () => {
           .catch((error) => {
             console.log("Error updating person:", error);
             showNotification(
-              "An error occurred while updating the person",
+              `An error occurred while updating ${newName}, person might be deleted already`,
               "error"
             );
           });

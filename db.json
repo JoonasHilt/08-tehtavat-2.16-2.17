@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "19293872",
-      "id": "1"
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": "2"
@@ -21,9 +16,9 @@
       "id": "4"
     },
     {
-      "name": "John Doe",
-      "number": "123-456-789",
-      "id": "5"
+      "id": "f5f2",
+      "name": "Joonas Hiltunen",
+      "number": "0504042258"
     }
   ]
 }
